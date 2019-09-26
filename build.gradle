@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group 'info.repy'
+version '1.0.0'
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+java{
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform('software.amazon.awssdk:bom:2.5.+')
+    implementation 'software.amazon.awssdk:dynamodb'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                name = 'DynamoDB Converter'
+                description = 'DynamoDB Converter. Java POJO and JSON supported.'
+                url = 'https://github.com/Repy/dynamodb-converter'
+                licenses {
+                    license {
+                        name = 'BSD 3-Clause License'
+                        url = 'https://opensource.org/licenses/BSD-3-Clause'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'repy'
+                        name = 'Repy'
+                        email = 'gamecube02+git@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/Repy/dynamodb-converter.git'
+                    developerConnection = 'scm:git:https://github.com/Repy/dynamodb-converter.git'
+                    url = 'https://github.com/Repy/dynamodb-converter.git'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url 'https://pkgs.dev.azure.com/repy/github-pipeline/_packaging/maven/maven/v1'
+            credentials {
+                username "AZURE_ARTIFACTS"
+                password System.getenv("AZURE_ARTIFACTS_ENV_ACCESS_TOKEN")
+            }
+        }
+    }
+}
+
