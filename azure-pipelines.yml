@@ -6,6 +6,9 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+- group: maven
+
 steps:
 - task: Gradle@2
   displayName: 'Gradle Maven Publish'
