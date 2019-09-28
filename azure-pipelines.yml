@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+      - refs/tags/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Gradle@2
+  displayName: 'Gradle Maven Publish'
+  inputs:
+    gradleWrapperFile: '$(Build.SourcesDirectory)/gradlew'
+    options: '--no-daemon -Dazure.artifacts.token=$(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN)'
+    workingDirectory: '$(Build.SourcesDirectory)'
+    tasks: 'publish'
+    publishJUnitResults: false
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'

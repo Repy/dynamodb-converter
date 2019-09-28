@@ -56,7 +56,7 @@ publishing {
             url 'https://pkgs.dev.azure.com/repy/github-pipeline/_packaging/maven/maven/v1'
             credentials {
                 username "AZURE_ARTIFACTS"
-                password System.getenv("AZURE_ARTIFACTS_ENV_ACCESS_TOKEN")
+                password System.getProperty("azure.artifacts.token")
             }
         }
     }
