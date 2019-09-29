@@ -14,7 +14,7 @@ steps:
   displayName: 'Gradle Maven Publish'
   inputs:
     gradleWrapperFile: '$(Build.SourcesDirectory)/gradlew'
-    options: '--no-daemon -Dazure.artifacts.token=$(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN)'
+    options: '--no-daemon -Dbuild.sourcebranch=$(Build.SourceBranch) -Dazure.artifacts.token=$(AZURE_ARTIFACTS_ENV_ACCESS_TOKEN)'
     workingDirectory: '$(Build.SourcesDirectory)'
     tasks: 'publish'
     publishJUnitResults: false
