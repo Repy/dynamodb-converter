@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'info.repy'
-version '1.0.0'
+version System.getProperty("build.sourcebranch").toString().split("/")[2]
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
