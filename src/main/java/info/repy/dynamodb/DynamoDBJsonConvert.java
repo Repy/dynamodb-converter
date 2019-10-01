@@ -60,6 +60,7 @@ public class DynamoDBJsonConvert {
             case NUMBER:
                 return AttributeValue.builder().n(data.asText()).build();
             case STRING:
+                if (data.asText().isEmpty()) return AttributeValue.builder().nul(true).build();
                 return AttributeValue.builder().s(data.asText()).build();
             case BOOLEAN:
                 return AttributeValue.builder().bool(data.booleanValue()).build();
@@ -69,8 +70,11 @@ public class DynamoDBJsonConvert {
                     JsonNode e = it.next();
                     list.add(toAttributeValue(e));
                 }
+                if (list.isEmpty()) return AttributeValue.builder().nul(true).build();
                 return AttributeValue.builder().l(list).build();
             case OBJECT:
+                Map<String, AttributeValue> d = toAttributeMap(data);
+                if (d.isEmpty()) return AttributeValue.builder().nul(true).build();
                 return AttributeValue.builder().m(toAttributeMap(data)).build();
             case POJO:
             case MISSING:
