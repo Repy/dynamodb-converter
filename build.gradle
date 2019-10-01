@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'maven-publish'
 }
 
@@ -26,10 +26,12 @@ dependencies {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            from components.java
             pom {
                 name = 'DynamoDB Converter'
                 description = 'DynamoDB Converter. Java POJO and JSON supported.'
                 url = 'https://github.com/Repy/dynamodb-converter'
+                packaging = 'jar'
                 licenses {
                     license {
                         name = 'BSD 3-Clause License'
