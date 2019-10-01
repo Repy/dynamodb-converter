@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'info.repy'
-version System.getProperty("build.sourcebranch").toString().split("/")[2]
+version System.getProperty("build.sourcebranch") == null ? "1.0.0" : System.getProperty("build.sourcebranch").toString().split("/")[2]
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
@@ -21,6 +21,10 @@ repositories {
 dependencies {
     implementation platform('software.amazon.awssdk:bom:2.5.+')
     implementation 'software.amazon.awssdk:dynamodb'
+    testImplementation 'junit:junit:4.12'
+    def lombokVersion = "1.18.8"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 }
 
 publishing {

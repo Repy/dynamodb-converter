@@ -76,14 +76,13 @@ public class DynamoDBPOJOConvert {
             try {
                 HashMap<String, AttributeValue> item = new HashMap<>();
                 Class<?> inputClass = data.getClass();
-                while (inputClass != null) {
-                    BeanInfo beanInfo = Introspector.getBeanInfo(inputClass);
-                    for (PropertyDescriptor f : beanInfo.getPropertyDescriptors()) {
-                        if (f.getReadMethod() == null) continue;
-                        Object child = f.getReadMethod().invoke(data);
-                        item.put(f.getName(), toAttributeValue(child));
-                    }
-                    inputClass = inputClass.getSuperclass();
+                BeanInfo beanInfo = Introspector.getBeanInfo(inputClass);
+                for (PropertyDescriptor f : beanInfo.getPropertyDescriptors()) {
+                    Method method = f.getReadMethod();
+                    if (method == null) continue;
+                    if (method.getDeclaringClass() == Object.class) continue;
+                    Object child = method.invoke(data);
+                    item.put(f.getName(), toAttributeValue(child));
                 }
                 return item;
             } catch (IllegalAccessException | IntrospectionException | InvocationTargetException e) {
@@ -97,21 +96,22 @@ public class DynamoDBPOJOConvert {
         try {
             T obj = outputCls.getConstructor(new Class<?>[]{}).newInstance();
             Class<?> inputClass = outputCls;
-            while (inputClass != null) {
-                BeanInfo beanInfo = Introspector.getBeanInfo(inputClass);
-                for (PropertyDescriptor f : beanInfo.getPropertyDescriptors()) {
-                    if (f.getWriteMethod() == null) continue;
-                    AttributeValue att = item.get(f.getName());
-                    if (att == null || (att.nul() != null && att.nul())) {
-                        if (!f.getPropertyType().isPrimitive()) {
-                            f.getWriteMethod().invoke(obj, new Object[]{null});
-                        }
-                    } else {
-                        Object val = toJavaValue(f.getPropertyType(), f.getWriteMethod().getGenericReturnType(), att);
-                        f.getWriteMethod().invoke(obj, val);
+            BeanInfo beanInfo = Introspector.getBeanInfo(inputClass);
+            for (PropertyDescriptor f : beanInfo.getPropertyDescriptors()) {
+                Method method = f.getWriteMethod();
+                if (method == null) continue;
+                if (method.getDeclaringClass() == Object.class) continue;
+                AttributeValue att = item.get(f.getName());
+                if (att == null || (att.nul() != null && att.nul())) {
+                    if (!f.getPropertyType().isPrimitive()) {
+                        method.invoke(obj, new Object[]{null});
                     }
+                } else {
+                    Class<?> type = method.getParameterTypes()[0];
+                    Type generic = method.getGenericParameterTypes()[0];
+                    Object val = toJavaValue(type, generic, att);
+                    method.invoke(obj, val);
                 }
-                inputClass = inputClass.getSuperclass();
             }
             return obj;
         } catch (InstantiationException | InvocationTargetException | IllegalAccessException | IntrospectionException | NoSuchMethodException e) {
