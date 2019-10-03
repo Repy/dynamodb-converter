@@ -59,10 +59,10 @@ publishing {
     }
     repositories {
         maven {
-            url 'https://pkgs.dev.azure.com/repy/github-pipeline/_packaging/maven/maven/v1'
+            url 'https://maven.pkg.github.com/Repy'
             credentials {
-                username "AZURE_ARTIFACTS"
-                password System.getProperty("azure.artifacts.token")
+                username "repy"
+                password System.getProperty("github.repy.token")
             }
         }
     }
