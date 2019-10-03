@@ -59,7 +59,7 @@ publishing {
     }
     repositories {
         maven {
-            url 'https://maven.pkg.github.com/Repy'
+            url 'https://maven.pkg.github.com/Repy/dynamodb-converter'
             credentials {
                 username "repy"
                 password System.getProperty("github.repy.token")
