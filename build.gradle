@@ -59,10 +59,10 @@ publishing {
     }
     repositories {
         maven {
-            url 'https://maven.pkg.github.com/Repy/dynamodb-converter'
+            url 'https://pkgs.dev.azure.com/repy/github-pipeline/_packaging/maven/maven/v1'
             credentials {
-                username "repy"
-                password System.getProperty("github.repy.token")
+                username "azure"
+                password System.getProperty("azure.devops.token")
             }
         }
     }

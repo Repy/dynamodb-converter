@@ -14,7 +14,7 @@ steps:
   displayName: 'Gradle Maven Publish'
   inputs:
     gradleWrapperFile: '$(Build.SourcesDirectory)/gradlew'
-    options: '--no-daemon -Dbuild.sourcebranch=$(Build.SourceBranch) -Dgithub.repy.token=$(github.repy.token)'
+    options: '--no-daemon -Dbuild.sourcebranch=$(Build.SourceBranch) -Dazure.devops.token=$(azure.devops.token)'
     workingDirectory: '$(Build.SourcesDirectory)'
     tasks: 'publish'
     publishJUnitResults: false
